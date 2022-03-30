@@ -17,8 +17,8 @@ The theme from libadwaita ported to GTK-3
 git clone --recurse-submodules https://github.com/lassekongo83/adw-gtk3.git
 
 %build
-git checkout tags/v1.6
 cd adw-gtk3
+git checkout tags/v1.6
 %meson
 %meson_build
 
