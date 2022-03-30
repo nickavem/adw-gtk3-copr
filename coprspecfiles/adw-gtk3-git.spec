@@ -1,4 +1,5 @@
 Name:           adw-gtk3-git
+Version:        main
 Release:        %{?dist}
 Summary:        The theme from libadwaita ported to GTK-3
 License:        GPLv2+
