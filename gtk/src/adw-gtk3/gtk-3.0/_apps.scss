@@ -637,12 +637,15 @@ window.background.chromium {
   button { font-weight: initial; }
 }
 @if $variant == 'dark' {
-  #MozillaGtkWidget.background {
-    background-color: $bg_color;
+  #MozillaGtkWidget {
+    &.background { background-color: $headerbar_color; }
+
+    > widget {
+      border { border-color: $borders_color; }
+    }
   }
 }
 
 // GNOME Web
 // https://github.com/lassekongo83/adw-gtk3/issues/59
 button .download_progress trough { min-height: 2px; }
-
