@@ -1011,8 +1011,8 @@ toolbar.inline-toolbar toolbutton {
 }
 
 %linked_middle {
-  border-left-color: $borders_color;
-  border-right-color: $borders_color;
+  border-left-color: if($variant == 'light', darken($borders_color, 5.7%), lighten($borders_color, 5%));
+  border-right-color: if($variant == 'light', darken($borders_color, 5.7%), lighten($borders_color, 5%));
   border-right-style: none;
   border-radius: 0;
   -gtk-outline-radius: 0;
@@ -1596,7 +1596,7 @@ headerbar {
   min-height: $_headerbar_height;
   border-width: 0 0 1px;
   border-style: solid;
-  border-color: $borders_color;
+  border-color: $headerbar_border;
   border-radius: 0;
 
   @include headerbar_fill;
@@ -2610,7 +2610,7 @@ notebook {
       border-color: transparent; //
 
       &.reorderable-page {
-        box-shadow: inset -1px -1px $borders_color;
+        box-shadow: inset -1px -1px $headerbar_border;
         border: none;
       }
 
@@ -2620,8 +2620,8 @@ notebook {
 
         &.reorderable-page {
           border-color: transparentize($borders_color, 0.7);
-          background-color: darken($shade_color, 2%);
-          box-shadow: inset -1px -1px $borders_color;
+          background-color: if($variant == 'light', darken($shade_color, 2%), lighten($shade_color, 2.3%));
+          box-shadow: inset -1px -1px $headerbar_border;
           transition: background 150ms ease-in-out;
         }
       }
@@ -2636,13 +2636,16 @@ notebook {
         }
       }
 
-      &:checked, &:checked:hover {
+      &:checked {
         color: $fg_color;
         &.reorderable-page {
           border-width: 0;
-          border-color: $borders_color;
+          border-color: $headerbar_border;
           background-color: $active_tab_color;
-          box-shadow: inset -1px -1px $borders_color;
+          box-shadow: inset -1px -1px $headerbar_border;
+          &:hover {
+            background-color: if($variant == 'light', darken($active_tab_color, 2.3%), lighten($active_tab_color, 2.3%));
+          }
         }
       }
 
@@ -2651,6 +2654,7 @@ notebook {
 
         &.reorderable-page {
           border-color: $backdrop_borders_color;
+          box-shadow: inset -1px -1px $borders_color;
           background-color: if($variant == 'light', $backdrop_base_color, $active_tab_color);
         }
       }
@@ -3244,7 +3248,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
  * GtkScale *
  ************/
 %scale_trough {
-  border-radius: 99px;
+  border-radius: $button_radius;
   background-color: $trough_color;
 
   &:disabled { background-color: $backdrop_dark_fill; }
@@ -3270,7 +3274,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
 }
 
 %scale_highlight {
-  border-radius: 99px;
+  border-radius: $button_radius;
   background-color: $fill_color;
   color: $fill_text_color;
 
@@ -3971,7 +3975,7 @@ scrolledwindow {
 
 //vbox and hbox separators
 separator {
-  background: $borders_color; //if($variant == 'light', transparentize(black, 0.9), transparentize(white, 0.9));
+  background: $borders_color;
   min-width: 1px;
   min-height: 1px;
   &:backdrop { background: $backdrop_borders_color; }
@@ -4731,7 +4735,7 @@ decoration {
   // this needs to be transparent
   // see bug #722563
   $_wm_border: if($variant=='light', transparentize(black, 0.95), darken($borders_color, 4%));
-  $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.98), darken($borders_color, 4%));
+  $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.98), darken($borders_color, 8.3%));
 
   box-shadow: 0 3px 12px 1px transparentize(black, 0.7),
               0 0 0 1px $_wm_border; //doing borders with box-shadow

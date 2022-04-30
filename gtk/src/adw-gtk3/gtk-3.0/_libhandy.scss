@@ -96,11 +96,15 @@ window.csd.unified {
         background-clip: padding-box;
         transition: $_scrollbar_transition;
 
-        background-color: $scrollbar_slider_color;
+        background-color: if($variant == 'light', darken($scrollbar_slider_color, 20%), lighten($scrollbar_slider_color, 20%));
 
-        &:hover { background-color: $scrollbar_slider_hover_color; }
+        &:hover {
+          background-color: if($variant == 'light', darken($scrollbar_slider_hover_color, 20%), lighten($scrollbar_slider_hover_color, 20%));
+        }
 
-        &:hover:active { background-color: $scrollbar_slider_active_color; }
+        &:hover:active {
+          background-color: if($variant == 'light', darken($scrollbar_slider_active_color, 20%), lighten($scrollbar_slider_active_color, 20%));
+        }
 
         &:disabled { background-color: transparent; }
       }
@@ -455,6 +459,8 @@ list.content {
               0 1px 3px 1px transparentize(black, .93),
               0 2px 6px 2px transparentize(black, .97);
 
+  &:backdrop { color: $backdrop_fg_color; }
+
   // Nested rows background
   // FIXME, bring this closer to libadwaita
   list.nested > row:not(:active) {
@@ -596,7 +602,7 @@ tabbar {
   .box {
     min-height: 30px;
     background: $shade_color;
-    border-bottom: 1px solid $borders_color;
+    border-bottom: 1px solid $headerbar_border;
 
     &:backdrop {
       background-color: if($variant == 'light', $backdrop_dark_fill, $shade_color);
@@ -664,7 +670,7 @@ tabbar {
 
   tab {
     border-style: solid;
-    border-color: $borders_color;
+    border-color: $headerbar_border;
     border-width: 0 1px 0 1px;
     transition: background 150ms ease-in-out;
     background-color: $shade_color;
@@ -673,12 +679,12 @@ tabbar {
       background-color: $active_tab_color;
 
       &:hover {
-        background-color: $active_tab_color;
+        background-color: if($variant == 'light', darken($active_tab_color, 2.3%), lighten($active_tab_color, 2.3%));
       }
     }
 
     &:hover {
-      background-color: darken($shade_color, 2%);
+      background-color: if($variant == 'light', darken($shade_color, 2%), lighten($shade_color, 2.3%));
     }
 
     &:backdrop {
