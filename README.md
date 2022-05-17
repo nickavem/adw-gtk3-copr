@@ -20,8 +20,7 @@ ArchLinux users can skip the below steps and install it from AUR: https://aur.ar
 
 ### Requirements
 
-- GTK 3.24.13+
-
+* GTK 3.24.13+
 * Debian/Ubuntu/Mint/PopOS - `apt install ninja-build git meson sassc`
 * Fedora - `dnf install ninja-build git meson sassc`
 * Arch/Manjaro - `pacman -S ninja git meson sassc`
@@ -77,6 +76,12 @@ The above commands assumes that you have the flathub respository active. If not:
 
 Thanks to [@dusansimic](https://github.com/dusansimic) for the help.
 
+### Snapcraft
+
+The theme is also available on snapcraft - https://snapcraft.io/adw-gtk3-theme
+
+Thanks to [@kuroehanako](https://github.com/kuroehanako) for the help.
+
 ## How to change themes
 
 Use `gnome-tweaks` to change your GTK3 themes.
@@ -106,4 +111,4 @@ For a global install: `sudo rm -r /usr/share/themes/adw-gtk3*`
 
 For a local install: `rm -r ~/.local/share/themes/adw-gtk3*`
 
-Flatpak: `flatpak uninstall org.gtk.Gtk3theme.adw-gtk3 && flatpak uninstall org.gtk.Gtk3theme.adw-gtk3-dark`
+Flatpak: `flatpak uninstall org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark`
