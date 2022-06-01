@@ -105,6 +105,9 @@
     border-left-color: $linked_border;
   }
 
+  // Location entry button
+  .linked entry ~ .image-button:not(:hover):not(:checked):not(:active):not(.model) { @extend %colored_buttons; }
+
   .view .dim-label { color: transparentize($fg_color, 0.45); }
 
   // Add a border around thumbnails
@@ -247,72 +250,6 @@ $disk_space_free: #eeeeec;
 list.tweak-categories separator.horizontal {
   background: transparent;
   margin: 2px 0;
-}
-
-// Geary
-.geary-expanded headerbar {
-  border: none;
-}
-
-geary-conversation-viewer#conversation_viewer { // right side
-  list.background.conversation-listbox.content {
-    background-color: $bg_color;
-    border: none;
-    border-radius: 0;
-
-    > row.activatable {
-      border: 1px solid $borders_color;
-      border-bottom-width: 0;
-
-      &:first-child {
-        border-top-left-radius: $card_radius;
-        border-top-right-radius: $card_radius;
-      }
-    }
-
-    .geary-attachment-pane {
-      border-radius: 0 0 $card_radius $card_radius;
-
-      actionbar.background {
-        background-color: transparent;
-
-        > revealer > box {
-          border-radius: 0 0 $card_radius $card_radius;
-        }
-      }
-    }
-
-    geary-composer-editor {
-      > box.background {
-        background-color: transparent;
-
-        > actionbar > revealer > box {
-          border-radius: 0 0 $card_radius $card_radius;
-        }
-      }
-    }
-  }
-
-  searchbar {
-    > revealer > box {
-      background-color: $base_color;
-      border-color: $borders_color;
-    }
-  }
-}
-
-.geary-message-summary button.flat {
-  margin: 0 2px;
-}
-
-// GNOME software
-.counter-label {
-  margin-top: 2px;
-  margin-bottom: 2px;
-  border-width: 0px;
-  padding-left: 2px;
-  padding-right: 2px;
-  box-shadow: inset 0 0 10px 10px $success_color;
 }
 
 // GNOME Todo
@@ -558,68 +495,6 @@ $panel_transition_duration: 250ms;
   margin: 5px;
 }
 
-// Inkscape
-#ToolboxCommon {
-  > #AuxToolbox {
-    #StyleSwatch { font-size: smaller; }
-
-    #Kludge { padding: 0; }
-
-    spinbutton,
-    entry { min-height: 32px; }
-
-    button:not(.up):not(.down) {
-      min-height: 24px;
-      min-width: 16px;
-      padding: 4px 8px;
-      border-radius: $button_radius;
-    }
-
-    spinbutton button { border-width: 1px; }
-  }
-
-  > toolbar.vertical {
-    margin-top: -4px;
-
-    button {
-      min-height: 24px;
-      min-width: 24px;
-      padding: 4px;
-      border-radius: $button_radius;
-    }
-  }
-}
-
-#CanvasTable {
-  button {
-    min-height: 16px;
-    min-width: 16px;
-    padding: 0;
-  }
-}
-
-#Canvas_and_Dock {
-  frame > border { border: none; }
-
-  // each canvases' titlebar
-  widget > widget {
-    > button.flat {
-      min-height: 16px;
-      min-width: 16px;
-      padding: 4px;
-    }
-
-    > box.horizontal image { padding: 4px; }
-  }
-
-  // vertical dock buttons
-  box.horizontal > box.vertical > button.flat {
-    min-height: 16px;
-    min-width: 24px;
-    padding: 8px 4px;
-  }
-}
-
 // Chromium
 window.background.chromium {
   background-color: if($variant == 'light', $bg_color, lighten($bg_color, 10%));
@@ -647,6 +522,15 @@ window.background.chromium {
   @if $variant == 'light' {
     scrollbar slider { background-color: darken($scrollbar_slider_color, 20%); }
   }
+
+  // https://github.com/lassekongo83/adw-gtk3/issues/130
+  menuitem {
+    check,
+    radio {
+      min-height: 12px;
+      min-width: 12px;
+    }
+  }
 }
 @if $variant == 'dark' {
   #MozillaGtkWidget {
@@ -658,7 +542,7 @@ window.background.chromium {
   }
 }
 
-// GNOME Web
+// GNOME Web / Epiphany
 // https://github.com/lassekongo83/adw-gtk3/issues/59
 button .download_progress trough { min-height: 2px; }
 
@@ -669,6 +553,17 @@ button .download_progress trough { min-height: 2px; }
   }
 }
 
+// Attempts to style the suggestions. The text color of the large label/.title can't be styled.
+dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > list > row:selected {
+  &, &:hover { background-color: $selected_bg_color; } // FIXME: Hover not working for some reason.
+
+  .subtitle {
+    color: $selected_fg_color;
+    @extend .dim-label;
+  }
+  image { color: $selected_fg_color; }
+}
+
 // GNOME Builder
 .org-gnome-Builder {
   .dzlmenubuttonitem {
@@ -677,7 +572,7 @@ button .download_progress trough { min-height: 2px; }
   }
 }
 
-// Phosh squeekboard
+// Phosh
 // From: https://gitlab.gnome.org/World/Phosh/squeekboard/-/tree/master/data
 sq_view {
   font-size: 1.5em;
