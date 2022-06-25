@@ -37,7 +37,7 @@ window.flat headerbar {
 
 .h4,
 .category-label {
-  color: rgba($fg_color, 0.8);
+  color: gtkshade($fg_color, 1.2);
   font-weight: 700;
 }
 
@@ -68,8 +68,8 @@ list .h4 {
     border-bottom-width: 1px;
     border-left-width: 0;
     border-radius: 0;
-    border-bottom-color: darken($borders_color, 35%);
-    background-color: darken($base_color, 15%);
+    border-bottom-color: gtkshade($borders_color, 0.75);
+    background-color: gtkshade($base_color, 0.85);
 
     &:first-child { border-radius: $button_radius 0 0; }
     &:last-child { border-radius: 0 $button_radius 0 0; }
@@ -80,15 +80,15 @@ list .h4 {
 
   .empty-block {
     border-bottom-width: 1px;
-    border-bottom-color: darken($borders_color, 40%);
-    background-color: darken($base_color, 5%);
+    border-bottom-color: gtkshade($borders_color, 0.6);
+    background-color: gtkshade($base_color, 0.95);
 
     image { color: black; }
   }
 
   .app {
     border-bottom-width: 1px;
-    border-bottom-color: darken($purple_1, 30%);
+    border-bottom-color: gtkshade($purple_1, 0.7);
     background-color: $purple_1;
 
     image { color: white; }
@@ -96,7 +96,7 @@ list .h4 {
 
   .audio {
     border-bottom-width: 1px;
-    border-bottom-color: darken($orange_2, 20%);
+    border-bottom-color: gtkshade($orange_2, 0.8);
     background-color: $orange_2;
 
     image { color: black; }
@@ -104,7 +104,7 @@ list .h4 {
 
   .files {
     border-bottom-width: 1px;
-    border-bottom-color: darken($blue_1, 20%);
+    border-bottom-color: gtkshade($blue_1, 0.8);
     background-color: $blue_1;
 
     image { color: black; }
@@ -112,7 +112,7 @@ list .h4 {
 
   .photo {
     border-bottom-width: 1px;
-    border-bottom-color: darken($green_2, 30%);
+    border-bottom-color: gtkshade($green_2, 0.7);
     background-color: $green_2;
 
     image { color: black; }
@@ -120,7 +120,7 @@ list .h4 {
 
   .video {
     border-bottom-width: 1px;
-    border-bottom-color: darken($red_1, 20%);
+    border-bottom-color: gtkshade($red_1, 0.8);
     background-color: $red_1;
 
     image { color: white; }
@@ -229,7 +229,7 @@ list .h4 {
 GraniteWidgetsPopOver {
   -GraniteWidgetsPopOver-arrow-width: 21;
   -GraniteWidgetsPopOver-arrow-height: 10;
-  -GraniteWidgetsPopOver-border-radius: 8px;
+  -GraniteWidgetsPopOver-border-radius: $popover_radius;
   -GraniteWidgetsPopOver-border-width: 0;
   -GraniteWidgetsPopOver-shadow-size: 12;
   
@@ -314,7 +314,7 @@ paper,
     &:selected:backdrop,
     &:selected:hover:backdrop {
       background-color: transparentize(black, 0.8);
-      color: darken($bg_color, 5%);
+      color: gtkshade($bg_color, 0.95);
     }
   }
 
@@ -347,4 +347,128 @@ paper,
   tab {
     &.reorderable-page { padding: 8px; }
   }
+}
+
+// Scales
+scale {
+  &.temperature trough {
+    background-image: linear-gradient(
+      to right,
+      rgba($blue_1, 0.4),
+      $light_4,
+      $yellow_1
+    );
+  }
+  
+  &.temperature:dir(rtl) trough {
+    background-image: linear-gradient(
+      to left,
+      rgba($blue_1, 0.4),
+      $light_4,
+      $yellow_1
+    );
+  }
+  
+  &.warmth trough {
+    background-image: linear-gradient(
+      to right,
+      rgba($yellow_1, 0.4),
+      rgba($yellow_5, 0.6)
+    );
+  }
+  &.warmth:dir(rtl) trough {
+    background-image: linear-gradient(
+      to left,
+      rgba($yellow_1, 0.4),
+      rgba($yellow_5, 0.6)
+    );
+  }
+}
+
+// Terminal
+.terminal,
+.terminal text {
+  background-color: $dark_3;
+  color: white;
+  font-family: monospace;
+  
+  selection {
+    background-color: $selected_bg_color;
+    color: white;
+  }
+
+  &:backdrop {
+    background-color: $dark_2;
+    color: white;
+  }
+}
+
+label.terminal {
+  padding: 1em;
+}
+
+// Welcome
+.welcome {
+  font-size: 10pt;
+  text-shadow: none;
+
+  .dim-label { @extend .dim-label; }
+
+  .h1, .h3 { color: gtkshade($fg_color, 1.2); }
+}
+
+// Back button
+button.back-button,
+button.back-button.text-button {
+  padding-right: 8px;
+  padding-left: 12px * 3;
+  transition: $button_transition;
+  background-image: -gtk-icontheme('go-previous-symbolic');
+  background-repeat: no-repeat no-repeat;
+  background-position: 5px 50%;
+  background-size: 21px;
+  
+  .titlebar & {
+    @include button(normal, $headerbar_bg_color, $headerbar_fg_color);
+    background-color: $headerbar_bg_color;
+    background-image: -gtk-icontheme('go-previous-symbolic');
+    background-repeat: no-repeat no-repeat;
+    background-position: 5px 50%;
+    background-size: 21px;
+    padding-left: 12px * 3;
+    
+    &:hover {
+      @include button(hover, $headerbar_bg_color, $headerbar_fg_color);
+      background-image: -gtk-icontheme('go-previous-symbolic');
+      background-repeat: no-repeat no-repeat;
+      background-position: 5px 50%;
+      background-size: 21px;
+    }
+    
+    &:active {
+      @include button(active, $headerbar_bg_color, $headerbar_fg_color);
+      background-image: -gtk-icontheme('go-previous-symbolic');
+      background-repeat: no-repeat no-repeat;
+      background-position: 5px 50%;
+      background-size: 21px;
+    }
+  }
+  
+  &:dir(rtl) {
+    padding: 0.5em 0.6em;
+    padding-right: 12px * 3;
+    padding-left: 8px;
+    background-image: -gtk-icontheme('go-next-symbolic');
+    background-repeat: no-repeat no-repeat;
+    background-position: 90% 50%;
+  }
+}
+
+// Checkerboard
+.checkerboard {
+  box-shadow: 0px 1px 2px 0px gtkalpha($borders_color, 0.5),
+              0px 0px 0px 1px gtkalpha($borders_color, 0.5),
+              0px 2px 0px 0px gtkalpha($borders_color, 0.5);
+  border-radius: 2px;
+  background: url('assets/Checkerboard.png') repeat;
 }

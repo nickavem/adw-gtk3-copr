@@ -13,20 +13,20 @@
       border-radius: $button_radius;
       border: none;
       padding-right: 6px;
-      @include button(normal, $headerbar_color, $fg_color);
+      @include button(normal, $headerbar_bg_color, $headerbar_fg_color);
 
       &:backdrop {
-        @include button(backdrop, $bg_color, $backdrop_fg_color);
+        @include button(backdrop, $headerbar_backdrop_color, $backdrop_fg_color);
       }
     }
 
     .nautilus-path-bar {
       border-radius: $button_radius;
-      @include button(normal, $headerbar_color, $fg_color);
+      @include button(normal, $headerbar_bg_color, $headerbar_fg_color);
       min-height: 34px;
 
       &:backdrop {
-        @include button(backdrop, $bg_color, $backdrop_fg_color);
+        @include button(backdrop, $headerbar_backdrop_color, $backdrop_fg_color);
       }
 
       button:not(.titlebutton) {
@@ -46,7 +46,7 @@
           background-color: transparent;
 
           &:hover {
-            @include button(active, $bg_color, $fg_color);
+            @include button(active, $bg_color, $headerbar_fg_color);
             * { opacity: 1; }
             &:backdrop {
               @include button(backdrop-active, $bg_color, $backdrop_fg_color);
@@ -55,19 +55,19 @@
         }
 
         &.toggle.popup {
-          @include button(normal, $headerbar_color, $fg_color);
+          @include button(normal, $headerbar_bg_color, $headerbar_fg_color);
           border-radius: 0 $button-radius $button-radius 0;
-          border-left: 1px solid $linked_border;
-          image { color: $text_color; }
+          border-left: 1px solid $border_color;
+          image { color: $headerbar_fg_color; }
 
-          &:hover { @include button(hover, $headerbar_color, $fg_color); }
+          &:hover { @include button(hover, $headerbar_bg_color, $headerbar_fg_color); }
 
-          &:checked { @include button(active, $headerbar_color, $fg_color); }
+          &:checked { @include button(active, $headerbar_bg_color, $headerbar_fg_color); }
 
           &:backdrop {
             @include button(backdrop, $bg_color, $backdrop_fg_color);
             &:hover { @include button(normal, $bg_color, $backdrop_fg_color); }
-            border-left: 1px solid $backdrop_linked_border;
+            border-left: 1px solid $border_color;
           }
         }
       }
@@ -102,19 +102,19 @@
 
   .search + .toggle.popup {
     @extend %colored_buttons;
-    border-left-color: $linked_border;
+    border-left-color: $border_color;
   }
 
   // Location entry button
   .linked entry ~ .image-button:not(:hover):not(:checked):not(:active):not(.model) { @extend %colored_buttons; }
 
-  .view .dim-label { color: transparentize($fg_color, 0.45); }
+  .view .dim-label { color: gtkalpha($fg_color, 0.55); }
 
   // Add a border around thumbnails
   .thumbnail {
-    box-shadow: 0px 1px 2px 0px transparentize($borders_color, 0.5),
-                0px 0px 0px 1px transparentize($borders_color, 0.5),
-                0px 2px 0px 0px transparentize($borders_color, 0.5);
+    box-shadow: 0px 1px 2px 0px gtkalpha($borders_color, 0.5),
+                0px 0px 0px 1px gtkalpha($borders_color, 0.5),
+                0px 2px 0px 0px gtkalpha($borders_color, 0.5);
     border-radius: 2px;
     // Background for thumbnails with transparent areas.
     background: url('assets/Checkerboard.png') repeat;
@@ -233,11 +233,11 @@ $disk_space_free: #eeeeec;
 
   row:hover button {
     &:hover {
-      background-color: rgba($fg_color, 0.15);
+      background-color: gtkalpha(currentColor, .15);
     }
 
     &:active {
-      background-color: rgba($fg_color, 0.25);
+      background-color: gtkalpha(currentColor, .3);
     }
   }
 
@@ -257,7 +257,7 @@ list.tweak-categories separator.horizontal {
   taskrow.activatable.new-task-row button.popup.toggle {
     border-radius: 0px;
     border: none;
-    border-left: 1px solid $borders-color;
+    border-left: 1px solid $borders_color;
     padding-left: 10px;
     padding-right: 10px;
     -gtk-outline-radius: 0px;
@@ -265,7 +265,7 @@ list.tweak-categories separator.horizontal {
 
   viewport.view,
   listbox.transparent {
-    background-color: darken($base_color, 5%);
+    background-color: gtkshade($base_color, 0.95);
 
     &:backdrop {
       background-color: $backdrop_base_color;
@@ -276,7 +276,7 @@ list.tweak-categories separator.horizontal {
 // Guake
 // Fix bugged transparent headerbar background
 window#guake-terminal notebook header {
-  background: $headerbar_color;
+  background: $headerbar_bg_color;
 }
 
 // XFCE4
@@ -285,7 +285,7 @@ XfdesktopIconView.view {
   color: $osd_fg_color;
   border-radius: $button_radius;
   &:active {
-    background: rgba(darken($selected_bg_color, 15%), 0.5);
+    background: gtkalpha(gtkmix(black, $selected_bg_color, 15%), 0.5);
     text-shadow: 0 1px 1px black;
   }
   .label { text-shadow: 1px 1px 2px black; }
@@ -296,7 +296,7 @@ XfdesktopIconView.view {
 }
 
 $panel_bg_color: #000;
-$panel_fg_color: if($variant == 'light', lighten($bg_color, 10%), darken($fg_color, 5%));
+$panel_fg_color: if($variant == 'light', gtkmix(white, $bg_color, 10%), gtkmix(black, $fg_color, 5%));
 $panel_transition_duration: 250ms;
 .xfce4-panel.background {
   border: none; 
@@ -331,24 +331,24 @@ $panel_transition_duration: 250ms;
 
     &:disabled {
       background-color: transparent;
-      color: transparentize($panel_fg_color, 0.8);
+      color: gtkalpha($panel_fg_color, 0.2);
     }
     
     &:hover:not(:active):not(:checked) {
       color: $panel_fg_color;
-      background-color: transparentize($panel_fg_color, 0.85);
+      background-color: gtkalpha($panel_fg_color, 0.25);
       background-image: none;
     }
 
     &:checked {
-      background-color: transparentize($panel_fg_color, 0.8);
+      background-color: gtkalpha($panel_fg_color, 0.2);
       color: $panel_fg_color;
 
-      &:hover { background-color: transparentize($panel_fg_color, 0.75); }
+      &:hover { background-color: gtkalpha($panel_fg_color, 0.35); }
 
       &:disabled {
         @include button(undecorated);
-        color: transparentize($panel_fg_color, 0.8);
+        color: gtkalpha($panel_fg_color, 0.2);
       }
     }
     entry { caret-color: $text_color; }
@@ -362,7 +362,7 @@ $panel_transition_duration: 250ms;
         @include button(normal, $menu_color, $text_color);
         &:disabled {
           @include button(insensitive);
-          border-color: transparentize($borders_color, 0.5);
+          border-color: gtkalpha($borders_color, 0.5);
         }
       }
     }
@@ -469,24 +469,6 @@ $panel_transition_duration: 250ms;
       // link linked buttons
       margin-right: 0;
     }
-
-    button {
-      // return non-flat buttons
-      @each $state,
-      $t in ("", "normal"),
-      (":hover", "hover"),
-      (":active, &:checked", "active"),
-      (":disabled", "insensitive"),
-      (":disabled:active, &:disabled:checked", "insensitive-active"),
-      (":backdrop", "backdrop"),
-      (":backdrop:active, &:backdrop:checked", 'backdrop-active'),
-      (":backdrop:disabled", 'backdrop-insensitive'),
-      (":backdrop:disabled:active, &:backdrop:disabled:checked", 'backdrop-insensitive-active') {
-        &#{$state} {
-          @include button($t);
-        }
-      }
-    }
   }
 }
 
@@ -497,12 +479,12 @@ $panel_transition_duration: 250ms;
 
 // Chromium
 window.background.chromium {
-  background-color: if($variant == 'light', $bg_color, lighten($bg_color, 10%));
+  background-color: if($variant == 'light', $bg_color, gtkmix(white, $bg_color, 10%));
 
   entry,
   > button {
-    border-color: if($variant == 'light', darken($bg_color, 27%), lighten($bg_color, 27%));
-    background-color: if($variant == 'light', darken($bg_color, 20%), lighten($bg_color, 21%));
+    border-color: if($variant == 'light', gtkmix(black, $bg_color, 27%), gtkmix(white, $bg_color, 27%));
+    background-color: if($variant == 'light', gtkmix(black, $bg_color, 20%), gtkmix(white, $bg_color, 21%));
   }
 
   textview.view { 
@@ -520,7 +502,10 @@ window.background.chromium {
   button { font-weight: initial; }
 
   @if $variant == 'light' {
-    scrollbar slider { background-color: darken($scrollbar_slider_color, 20%); }
+    scrollbar slider {
+      background-color: gtkalpha(currentColor, .4);
+      &:hover { background-color: gtkalpha(currentColor, .6); }
+    }
   }
 
   // https://github.com/lassekongo83/adw-gtk3/issues/130
@@ -534,7 +519,7 @@ window.background.chromium {
 }
 @if $variant == 'dark' {
   #MozillaGtkWidget {
-    &.background { background-color: $headerbar_color; }
+    &.background { background-color: $headerbar_bg_color; }
 
     > widget {
       border { border-color: $borders_color; }
@@ -576,8 +561,8 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 // From: https://gitlab.gnome.org/World/Phosh/squeekboard/-/tree/master/data
 sq_view {
   font-size: 1.5em;
-  background-color: mix($base_color, $fg_color, 0.1);
-  box-shadow: inset 0 1px 0 0 mix($borders_color, $base_color, 0.8);
+  background-color: gtkmix($base_color, $fg_color, 10%);
+  box-shadow: inset 0 1px 0 0 gtkmix($borders_color, $base_color, 80%);
 
   &.wide sq_button { margin: 3px; }
 
@@ -591,25 +576,25 @@ sq_button {
   border-radius: $button_radius;
   margin: 2px;
   color: $fg_color;
-  background: transparentize($fg_color, 0.07);
+  background: gtkalpha($fg_color, 0.93);
   box-shadow: 0 1px 0 0 rgba(0,0,0,0.2);
 
-  &:active { background: transparentize($fg_color, 0.11); }
+  &:active { background: gtkalpha($fg_color, 0.89); }
 
   &.altline, &.special {
-    background: transparentize($fg_color, 0.15);
-    &:active { background: transparentize($fg_color, 0.2); }
+    background: gtkalpha($fg_color, 0.85);
+    &:active { background: gtkalpha($fg_color, 0.8); }
   }
 
   &.latched {
     font-weight: bold;
-    background: transparentize($fg_color, 0.2);
-    color: transparentize($fg_color, 0.8);
+    background: gtkalpha($fg_color, 0.8);
+    color: gtkalpha($fg_color, 0.2);
   }
 
   &.locked {
     font-weight: bold;
-    background: transparentize($fg_color, 0.5);
+    background: gtkalpha($fg_color, 0.5);
     color: $base_color;
   }
 
@@ -623,8 +608,8 @@ sq_button {
   color: $selected_fg_color;
 
   &:active {
-    background: mix($selected_bg_color, black, 0.2);
-    color: mix($selected_fg_color, black, 0.2);
+    background: gtkmix(black, $selected_bg_color, 20%);
+    color: gtkmix(black, $selected_fg_color, 20%);
   }
 }
 

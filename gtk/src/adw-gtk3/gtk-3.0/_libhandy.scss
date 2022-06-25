@@ -95,18 +95,6 @@ window.csd.unified {
         border-radius: 10px;
         background-clip: padding-box;
         transition: $_scrollbar_transition;
-
-        background-color: if($variant == 'light', darken($scrollbar_slider_color, 20%), lighten($scrollbar_slider_color, 20%));
-
-        &:hover {
-          background-color: if($variant == 'light', darken($scrollbar_slider_hover_color, 20%), lighten($scrollbar_slider_hover_color, 20%));
-        }
-
-        &:hover:active {
-          background-color: if($variant == 'light', darken($scrollbar_slider_active_color, 20%), lighten($scrollbar_slider_active_color, 20%));
-        }
-
-        &:disabled { background-color: transparent; }
       }
     }
 
@@ -320,11 +308,11 @@ viewswitcher {
     &:not(only-child):first-child:not(:checked):hover,
     &:not(:checked):hover + button:not(:checked):not(:hover),
     &:not(:checked):not(:hover) + button:not(:checked):hover {
-      border-left-color: shade($borders_color, 1.15);
+      border-left-color: $border_color;
     }
 
     &:not(only-child):last-child:not(:checked):hover {
-      border-right-color: shade($borders_color, 1.15);
+      border-right-color: $border_color;
     }
 
     &:not(:checked):hover:backdrop {
@@ -335,24 +323,32 @@ viewswitcher {
     // View switcher in a header bar
     headerbar &:not(:checked) {
       &:hover:not(:backdrop) {
-        @if $variant == 'light' { @include button(hover, lighten($headerbar_color, 6.3%), $fg_color); }
-        @else { @include button(hover, darken($headerbar_color, 6.3%), $fg_color); }
         background-image: none;
+        @if $variant == 'light' {
+          @include button(normal, gtkmix(white, $headerbar_bg_color, 28%), $headerbar_fg_color);
+        }
+        @else {
+          @include button(normal, gtkmix(black, $headerbar_bg_color, 13%), $headerbar_fg_color);
+        }
       }
 
       &:not(only-child):first-child:hover,
       &:hover + button:not(:checked):not(:hover),
       &:not(:hover) + button:not(:checked):hover {
-        border-left-color: $borders_color;
+        border-left-color: $border_color;
       }
 
       &:not(only-child):last-child:hover {
-        border-right-color: $borders_color;
+        border-right-color: $border_color;
       }
 
       &:hover:backdrop {
-        @if $variant == 'light' { @include button(backdrop, lighten($bg_color, 1.3%), $backdrop_fg_color); }
-        @else { @include button(backdrop, darken($bg_color, 1.3%), $backdrop_fg_color); }
+        @if $variant == 'light' {
+          @include button(backdrop, gtkmix(white, $headerbar_backdrop_color, 70%), $backdrop_fg_color);
+        }
+        @else {
+          @include button(backdrop, gtkmix(black, $headerbar_backdrop_color, 10%), $backdrop_fg_color);
+        }
         background-image: none;
       }
     }
@@ -492,7 +488,7 @@ list.content {
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid if($variant == 'light', lighten($borders_color, 7%), lighten($borders_color, 3.7%));
+      border-bottom: 1px solid $border_color;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
@@ -536,10 +532,10 @@ button.list-button:not(:active):not(:checked):not(:hover) {
 
 // HdyStatusPage
 statuspage > scrolledwindow > viewport > box > clamp > box > .icon {
-  color: transparentize($fg_color, 0.5);
+  color: gtkalpha($fg_color, 0.5);
 
   &:backdrop {
-    color: transparentize($backdrop_fg_color, 0.5);
+    color: gtkalpha($backdrop_fg_color, 0.5);
   }
 }
 
@@ -599,19 +595,19 @@ row {
 
 @mixin need-attention-gradient($dir) {
   background: linear-gradient(to #{$dir},
-                              transparentize($selected_bg_color, .3),
-                              transparentize($selected_bg_color, .5) 1px,
-                              transparentize($selected_bg_color, 1) 20px);
+                              gtkalpha($selected_bg_color, .7),
+                              gtkalpha($selected_bg_color, .5) 1px,
+                              gtkalpha($selected_bg_color, 0) 20px);
 }
 
 tabbar {
   .box {
     min-height: 30px;
-    background: $shade_color;
-    border-bottom: 1px solid $headerbar_border;
+    background: $tab_color;
+    border-bottom: 1px solid $borders_color;
 
     &:backdrop {
-      background-color: if($variant == 'light', $backdrop_dark_fill, $shade_color);
+      background-color: $tab_color_backdrop;
       border-color: $backdrop_borders_color;
     }
   }
@@ -676,37 +672,31 @@ tabbar {
 
   tab {
     border-style: solid;
-    border-color: $headerbar_border;
+    border-color: $borders_color;
     border-width: 0 1px 0 1px;
     transition: background 150ms ease-in-out;
-    background-color: $shade_color;
+    background-color: $tab_color;
 
     &:checked {
-      background-color: $active_tab_color;
+      background-color: $tab_color_active;
 
-      &:hover {
-        background-color: if($variant == 'light', darken($active_tab_color, 2.3%), lighten($active_tab_color, 2.3%));
-      }
+      &:hover { background-color: $tab_color_active_hover; }
     }
 
-    &:hover {
-      background-color: if($variant == 'light', darken($shade_color, 2%), lighten($shade_color, 2.3%));
-    }
+    &:hover { background-color: $tab_color_hover; }
 
     &:backdrop {
       border-color: $backdrop_borders_color;
-      background-color: if($variant == 'light', lighten($shade_color, 5.3%), $shade_color);
-      color: mix($backdrop_fg_color, $backdrop_bg_color, 60%);
+      background-color: $tab_color_backdrop;
 
-      &:checked {
-        background-color: if($variant == 'light', $backdrop_base_color, $active_tab_color);
-      }
+      &:hover { background-color: $tab_color_backdrop_hover; }
+      &:checked { background-color: $tab_color_backdrop_active; }
     }
   }
 
   .start-action,
   .end-action {
-    background: $shade_color;
+    background: $tab_color;
     border-color: $alt_borders_color;
     border-style: solid;
     transition: background 150ms ease-in-out;
@@ -744,9 +734,9 @@ tabbar {
 .tab-drag-icon {
   tab {
     min-height: 26px;
-    background-color: $active_tab_color;
+    background-color: $tab_color_active;
 
-    $_wm_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
+    $_wm_border: if($variant=='light', transparentize(black, 0.77), gtkalpha($borders_color, 0.9));
 
     box-shadow: 0 3px 9px 1px transparentize(black, 0.75),
                 0 0 0 1px $_wm_border, //doing borders with box-shadow
@@ -765,8 +755,8 @@ tabbar,
       background-image:
         radial-gradient(ellipse at bottom,
                         transparentize(white, .2),
-                        transparentize($selected_bg_color, .8) 15%,
-                        transparentize($selected_bg_color, 1) 15%);
+                        gtkalpha($selected_bg_color, .2) 15%,
+                        gtkalpha($selected_bg_color, 0) 15%);
     }
 
     .tab-close-button,

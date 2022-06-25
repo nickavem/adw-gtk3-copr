@@ -17,6 +17,16 @@ You can then enable adw-gtk3 in the application `gnome-tweaks`.
 
 **If you use the dark theme** you'll also need to enable the dark appearance in `gnome-control-center`.
 
+Alternatively you can set the theme in the terminal:
+```bash
+# adw-gtk3 light
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+# adw-gtk3 dark
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark' && gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# Revert to GNOME's default theme
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+```
+
 ### Other install options
 These packages are maintained by contributors. It is recommended to install the flatpak versions if you use flatpak applications and the snapcraft version if you use snap applications.
 
@@ -32,9 +42,15 @@ dnf install adw-gtk3
 Thanks to [@dusansimic](https://github.com/dusansimic) (Flatpak, AUR), [@kuroehanako](https://github.com/kuroehanako) (Snapcraft), [@nickavem](https://github.com/nickavem) (Fedora copr) for the help.
 
 ### Installation from source
-This will install the latest version from the main branch. Use this install method if you want to contribute.
+This will install the latest version from the main branch. Use this install method if you want to contribute and help testing the theme.
 
 See [CONTRIBUTING.md](https://github.com/lassekongo83/adw-gtk3/blob/main/CONTRIBUTING.md) for the instructions.
+
+## Customizing
+Adw-gtk3 supports some customization with named colors. See: [adw-colors](https://github.com/lassekongo83/adw-colors) for more info.
+
+### GTK-4
+If you want to style GTK-4 apps with libadwaita see: [gtk4.md](https://github.com/lassekongo83/adw-gtk3/blob/main/gtk4.md)
 
 ## How to uninstall the theme(s)
 To be safe from any crashes or weirdness, change the theme to another one before running the command(s) below.
