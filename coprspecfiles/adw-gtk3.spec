@@ -1,5 +1,5 @@
 Name:           adw-gtk3
-Version:        2.0
+Version:        3.1
 Release:        2%{?dist}
 Summary:        The theme from libadwaita ported to GTK-3
 License:        GPLv2+
@@ -18,7 +18,7 @@ git clone --recurse-submodules https://github.com/lassekongo83/adw-gtk3.git
 
 %build
 cd adw-gtk3
-git checkout tags/v2.0
+git checkout tags/v3.1
 %meson
 %meson_build
 
