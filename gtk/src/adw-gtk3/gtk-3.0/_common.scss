@@ -2226,7 +2226,7 @@ menu,
 
     &:hover {
       color: if($variant == 'light', $fg_color, $selected_fg_color);
-      background-color: $view_selected_hover_color; //if($variant == 'light', $view_selected_hover_color, $popover_hover_color);
+      background-color: $view_selected_hover_color;
     }
 
     &:disabled {
@@ -2721,6 +2721,7 @@ scrollbar {
 
   // slider
   slider {
+    color: $fg_color;
     min-width: $_slider_width;
     min-height: $_slider_width;
     margin: -1px;
@@ -4756,7 +4757,7 @@ button.titlebutton {
 
   &:not(.appmenu) {
     border-radius: 9999px;
-    padding: 0px; //$_hb_btn_pad;
+    padding: 0px;
     margin: 0 4px;
     min-width: 24px;
     min-height: 24px;

@@ -1,5 +1,25 @@
 // Custom added styles
 
+// Checkerboard for thumbnails with transparent areas
+%checkerboard {
+  background-position: 0px 0px, 10px 10px;
+  background-size: 20px 20px;
+  background-image: linear-gradient(
+    45deg, $borders_color 25%,
+    transparent 25%,
+    transparent 75%,
+    $borders_color 75%,
+    $borders_color 100%
+  ),
+  linear-gradient(
+    45deg, $borders_color 25%,
+    $base_color 25%,
+    $base_color 75%,
+    $borders_color 75%,
+    $borders_color 100%
+  );
+}
+
 // Trying to mimic the headerbar button colors from the libadwaita theme when used in gtk4-widget-factory
 %colored_buttons {
   @include button(normal, $headerbar_bg_color, $headerbar_fg_color);
@@ -140,14 +160,42 @@
 
 // headerbar stuff
 headerbar, .titlebar {
+
+  // Text colors for gtk named color support (except backdrop and disabled)
+  &:not(.selection-mode) {
+    &,
+    entry {
+      color: $headerbar_fg_color;
+    }
+
+    &:backdrop,
+    entry:backdrop {
+      color: $backdrop_fg_color;
+    }
+
+    entry:disabled {
+      color: $insensitive_fg_color;
+    }
+
+    button {
+      &:not(.suggested-action):not(.destructive-action) {
+        color: $headerbar_fg_color;
+        &:backdrop { color: $backdrop_fg_color; }
+        &:disabled { color: $insensitive_fg_color; }
+      }
+    }
+
+    switch image { color: transparent; }
+  }
+
   button:not(.titlebutton) {
     &, &:backdrop { @include button(undecorated); }
     @extend %headerbar_buttons;
   }
 
   // Text buttons
-  button.text-button:not(.suggested-action):not(.destructive-action):not(:disabled) {
-    @extend %colored_buttons;
+  button.text-button {
+    &:not(.suggested-action):not(.destructive-action):not(:disabled) { @extend %colored_buttons; }
   }
 
   // Linked button borders
@@ -155,18 +203,8 @@ headerbar, .titlebar {
   .linked button:not(:only-child),
   & > .stack-switcher.linked > button:not(:only-child) {
     @extend %linked;
-    &, &:hover, &:not(:backdrop), &:not(:disabled) {
-      &:not(:first-child) { border-left-color: $border_color; }
-      &:not(:last-child) { border-right-color: $border_color; }
-    }
-    &:active, &:checked {
-      &:not(:first-child) { border-left-color: $border_color; }
-      &:not(:last-child) { border-right-color: $border_color; }
-    }
-    &:backdrop {
-      &:not(:first-child) { border-left-color: $border_color; }
-      &:not(:last-child) { border-right-color: $border_color; }
-    }
+    &:not(:first-child) { border-left-color: $border_color; }
+    &:not(:last-child) { border-right-color: $border_color; }
     &:first-child { border-left-color: transparent; }
     &:last-child { border-right-color: transparent; }
 
@@ -194,7 +232,9 @@ headerbar, .titlebar {
   // Selection mode
   &.selection-mode {
     button,
-    button.text-button:not(.suggested-action):not(.destructive-action):not(:disabled) { @extend %suggested_buttons; }
+    button.text-button:not(.suggested-action):not(.destructive-action):not(:disabled) {
+      @extend %suggested_buttons;
+    }
   }
 
   // Entries
@@ -281,7 +321,10 @@ headerbar, .titlebar {
   }
 
   // better animation when switching from backdrop
-  &:not(:backdrop) { transition: 200ms ease-in; }
+  &:not(:backdrop) {
+    transition: 50ms ease-in;
+    transition-property: background-color, background-image, box-shadow, border-color, color, text-shadow;
+  }
 
   // Balance out the titlebutton margin
   .right {
@@ -336,6 +379,12 @@ popover.background {
     &:disabled { @include button(insensitive, $popover_bg_color, $insensitive_fg_color); }
     &:backdrop { @include button(backdrop, $popover_bg_color, $backdrop_text_color); }
     &:backdrop:disabled { @include button(backdrop-insensitive, $popover_bg_color, $backdrop_fg_color); }
+  }
+
+  .linked.raised button,
+  .linked button {
+    &:not(:only-child):not(:first-child) { border-left-color: $borders_color; }
+    &:not(:only-child):not(:last-child) { border-right-color: $borders_color; }
   }
 }
 
@@ -433,4 +482,17 @@ popover.background {
     padding-left: 16px;
     padding-right: 16px;
   }
+
+  modelbutton.flat,
+  .menuitem.button.flat {
+    color: $popover_fg_color;
+    &:disabled label {
+      color: gtkalpha($popover_fg_color, .5);
+    }
+  }
+}
+
+// Mimic libadwaita popover padding
+popover.menu > stack {
+  margin: -6px;
 }

@@ -1,6 +1,9 @@
 // 3rd party application styles
 
-// Nautilus
+// ************
+// * Nautilus *
+// ************
+
 .nautilus-window {
   // Without this nautilus iconview grabs the bg_color
   notebook,
@@ -49,7 +52,7 @@
             @include button(active, $bg_color, $headerbar_fg_color);
             * { opacity: 1; }
             &:backdrop {
-              @include button(backdrop-active, $bg_color, $backdrop_fg_color);
+              @include button(backdrop-active, $headerbar_backdrop_color, $backdrop_fg_color);
             }
           }
         }
@@ -65,8 +68,8 @@
           &:checked { @include button(active, $headerbar_bg_color, $headerbar_fg_color); }
 
           &:backdrop {
-            @include button(backdrop, $bg_color, $backdrop_fg_color);
-            &:hover { @include button(normal, $bg_color, $backdrop_fg_color); }
+            @include button(backdrop, $headerbar_backdrop_color, $backdrop_fg_color);
+            &:hover { @include button(normal, $headerbar_backdrop_color, $backdrop_fg_color); }
             border-left: 1px solid $border_color;
           }
         }
@@ -116,8 +119,7 @@
                 0px 0px 0px 1px gtkalpha($borders_color, 0.5),
                 0px 2px 0px 0px gtkalpha($borders_color, 0.5);
     border-radius: 2px;
-    // Background for thumbnails with transparent areas.
-    background: url('assets/Checkerboard.png') repeat;
+    @extend %checkerboard;
   }
 
    // https://github.com/lassekongo83/adw-gtk3/issues/89
@@ -130,6 +132,20 @@
   .nautilus-canvas-item { border-radius: 0px; }
 
   .nautilus-canvas-item.label-text { border-radius: $button_radius; }
+
+  // List view
+  .nautilus-list-view {
+    .view {
+      &:selected {
+        background-color: $view_selected_color;
+        color: $text_color;
+        &:hover { background-color: $view_selected_hover_color; }
+      }
+      &:hover {
+        background-color: $view_hover_color;
+      }
+    }
+  }
 }
 
 // Floating status bar
@@ -192,7 +208,10 @@ $disk_space_free: #eeeeec;
   color: shade($disk_space_free, 0.7);
 }
 
-// Gedit
+// *********
+// * Gedit *
+// *********
+
 .gedit-search-slider {
   // gives gedit search entry some padding and a border
   // otherwise it's right under the headerbar
@@ -246,13 +265,24 @@ $disk_space_free: #eeeeec;
   }
 }
 
-// gnome-tweaks
+// ****************
+// * gnome-tweaks *
+// ****************
+
 list.tweak-categories separator.horizontal {
   background: transparent;
   margin: 2px 0;
 }
 
-// GNOME Todo
+.tweak-group .tweak list {
+  border-radius: $card_radius;
+  border: 1px solid $borders_color;
+}
+
+// **************
+// * gnome-todo *
+// **************
+
 .org-gnome-Todo {
   taskrow.activatable.new-task-row button.popup.toggle {
     border-radius: 0px;
@@ -273,13 +303,19 @@ list.tweak-categories separator.horizontal {
   }
 }
 
-// Guake
+// *********
+// * Guake *
+// *********
+
 // Fix bugged transparent headerbar background
 window#guake-terminal notebook header {
   background: $headerbar_bg_color;
 }
 
-// XFCE4
+// *********
+// * XFCE4 *
+// *********
+
 XfdesktopIconView.view {
   background: transparent;
   color: $osd_fg_color;
@@ -295,8 +331,11 @@ XfdesktopIconView.view {
   }
 }
 
-$panel_bg_color: #000;
-$panel_fg_color: if($variant == 'light', gtkmix(white, $bg_color, 10%), gtkmix(black, $fg_color, 5%));
+// Xfce4 panel
+@define-color panel_bg_color black;
+@define-color panel_fg_color white;
+$panel_bg_color: gtkcolor(panel_bg_color);
+$panel_fg_color: gtkcolor(panel_fg_color);
 $panel_transition_duration: 250ms;
 .xfce4-panel.background {
   border: none; 
@@ -333,7 +372,7 @@ $panel_transition_duration: 250ms;
       background-color: transparent;
       color: gtkalpha($panel_fg_color, 0.2);
     }
-    
+
     &:hover:not(:active):not(:checked) {
       color: $panel_fg_color;
       background-color: gtkalpha($panel_fg_color, 0.25);
@@ -369,7 +408,11 @@ $panel_transition_duration: 250ms;
   }
 }
 
-// Nemo
+// ********
+// * Nemo *
+// ********
+
+%desktop-canvas-item,
 .nemo-desktop.nemo-canvas-item {
   color: $selected_fg_color;
   text-shadow: 1px 1px 2px transparentize(black, 0.2);
@@ -472,19 +515,31 @@ $panel_transition_duration: 250ms;
   }
 }
 
-// USB Creator GTK
+// *******************
+// * USB Creator GTK *
+// *******************
+
 #dialog-action_area3 {
   margin: 5px;
 }
 
-// Chromium
+// ************
+// * Chromium *
+// ************
+
 window.background.chromium {
-  background-color: if($variant == 'light', $bg_color, gtkmix(white, $bg_color, 10%));
+  background-color: if($variant == 'light', $bg_color, gtkmix(currentColor, $bg_color, 10%));
+
+  // If there was/is an incognito class then https://github.com/lassekongo83/adw-gtk3/issues/147
+  // could be fixed, so disabled for now until a better solution is found.
+  //headerbar.titlebar button.titlebutton {
+  //  color: white;
+  //}
 
   entry,
   > button {
-    border-color: if($variant == 'light', gtkmix(black, $bg_color, 27%), gtkmix(white, $bg_color, 27%));
-    background-color: if($variant == 'light', gtkmix(black, $bg_color, 20%), gtkmix(white, $bg_color, 21%));
+    border-color: gtkmix(currentColor, $bg_color, 27%);
+    background-color: gtkmix(currentColor, $bg_color, 20%);
   }
 
   textview.view { 
@@ -492,12 +547,18 @@ window.background.chromium {
   }
 }
 
-// GNOME Calendar
+// ******************
+// * gnome-calendar *
+// ******************
+
 .org-gnome-Calendar {
   .titlebar .text-button { @extend %colored_buttons; }
 }
 
-// Firefox
+// ***********
+// * Firefox *
+// ***********
+
 #MozillaGtkWidget.background {
   button { font-weight: initial; }
 
@@ -527,7 +588,10 @@ window.background.chromium {
   }
 }
 
-// GNOME Web / Epiphany
+// ************************
+// * Epiphany / GNOME Web *
+// ************************
+
 // https://github.com/lassekongo83/adw-gtk3/issues/59
 button .download_progress trough { min-height: 2px; }
 
@@ -549,7 +613,10 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
   image { color: $selected_fg_color; }
 }
 
-// GNOME Builder
+// ***********
+// * Builder *
+// ***********
+
 .org-gnome-Builder {
   .dzlmenubuttonitem {
     font-weight: normal;
@@ -557,63 +624,10 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
   }
 }
 
-// Phosh
-// From: https://gitlab.gnome.org/World/Phosh/squeekboard/-/tree/master/data
-sq_view {
-  font-size: 1.5em;
-  background-color: gtkmix($base_color, $fg_color, 10%);
-  box-shadow: inset 0 1px 0 0 gtkmix($borders_color, $base_color, 80%);
+// ******************
+// * gnome-terminal *
+// ******************
 
-  &.wide sq_button { margin: 3px; }
-
-  &.pin sq_button {
-    border-radius: 0px;
-    margin: 1px 1px 1px 1px;
-  }
-}
-
-sq_button {
-  border-radius: $button_radius;
-  margin: 2px;
-  color: $fg_color;
-  background: gtkalpha($fg_color, 0.93);
-  box-shadow: 0 1px 0 0 rgba(0,0,0,0.2);
-
-  &:active { background: gtkalpha($fg_color, 0.89); }
-
-  &.altline, &.special {
-    background: gtkalpha($fg_color, 0.85);
-    &:active { background: gtkalpha($fg_color, 0.8); }
-  }
-
-  &.latched {
-    font-weight: bold;
-    background: gtkalpha($fg_color, 0.8);
-    color: gtkalpha($fg_color, 0.2);
-  }
-
-  &.locked {
-    font-weight: bold;
-    background: gtkalpha($fg_color, 0.5);
-    color: $base_color;
-  }
-
-  &.action { font-size: 0.75em; }
-
-  &.small { font-size: 0.5em; }
-}
-
-#Return {
-  background: $selected_bg_color;
-  color: $selected_fg_color;
-
-  &:active {
-    background: gtkmix(black, $selected_bg_color, 20%);
-    color: gtkmix(black, $selected_fg_color, 20%);
-  }
-}
-
-// GNOME Terminal
 terminal-window notebook > header {
   &.top,
   &.bottom {
@@ -626,10 +640,145 @@ terminal-window notebook > header {
   }
 }
 
-// GNOME Console/kgx
-// FIXME: Does not work for some unknown reason
-//.terminal-window {
-//  &.root {}
-//  &.remote {}
-//}
+terminal-window notebook {
+  scrollbar {
+    slider {
+      // Fix for Ubuntu
+      // avoids scrollbar protruding from the terminal window on wayland session
+      // workaround for https://bugs.launchpad.net/ubuntu/+source/gnome-terminal/+bug/1720651
+      margin: 0;
+      border-width: 3px;
+    }
+  }
+}
 
+// ********
+// * Caja *
+// ********
+
+window.background.caja-navigation-window #Toolbar {
+  border-bottom: 1px solid $borders_color;
+
+  &:backdrop {
+    background-color: $backdrop_bg_color;
+    border-color: $backdrop_borders_color;
+  }
+}
+
+.caja-pathbar button {
+  min-width: 32px;
+  border-radius: 0;
+  border-right-width: 0;
+  margin-right: -3px;
+
+  &.slider-button:nth-child(odd) {
+    border-radius: $button_radius 0px 0px $button_radius;
+  }
+  &.slider-button:nth-child(even) {
+    border-radius: 0 $button_radius $button_radius 0;
+    border-right-width: 1px;
+  }
+}
+
+.caja-side-pane .frame {
+  border-style: solid none none none;
+}
+.caja-notebook {
+  .view, .view.frame, .frame {
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
+// Gets rid of fat separator on backdrop
+.caja-side-pane + separator + box:backdrop {
+  background: $backdrop_bg_color;
+}
+
+.caja-navigation-window,
+.caja-desktop-window {
+  widget.view widget.entry {
+    background: gtkmix(currentColor, $bg_color, 5%);
+    color: $fg_color;
+    border-color: $borders_color;
+  
+    &:selected {
+      background: $selected_bg_color;
+      color: $selected_fg_color;
+    }
+  }
+}
+
+// desktop mode
+.caja-desktop.caja-canvas-item {
+  @extend %desktop-canvas-item;
+}
+
+// ************
+// * GNU Cash *
+// ************
+
+#gnc-id-main-window {
+  // https://github.com/lassekongo83/adw-gtk3/issues/148
+  treeview.view {
+    &:not(:selected):hover {
+      background-color: gtkmix(currentColor, $base_color, 7%);
+    }
+  }
+}
+
+// *********
+// * Geary *
+// *********
+
+geary-conversation-viewer#conversation_viewer {
+  list.background.conversation-listbox.content {
+    background-color: $bg_color;
+    border: none;
+    border-radius: 0;
+
+    > row.activatable {
+      border: 1px solid $borders_color;
+      border-bottom-width: 0;
+
+      &:first-child {
+        border-top-left-radius: $card_radius;
+        border-top-right-radius: $card_radius;
+      }
+    }
+
+    .geary-attachment-pane {
+      border-radius: 0 0 $card_radius $card_radius;
+
+      actionbar.background {
+        background-color: transparent;
+
+        > revealer > box {
+          border-radius: 0 0 $card_radius $card_radius;
+        }
+      }
+    }
+
+    geary-composer-editor {
+      > box.background {
+        background-color: transparent;
+
+        > actionbar > revealer > box {
+          border-radius: 0 0 $card_radius $card_radius;
+        }
+      }
+    }
+  }
+
+  searchbar {
+    > revealer > box {
+      background-color: $base_color;
+      border-color: $borders_color;
+    }
+  }
+}
+
+.geary-folder-popover-list-row {
+  border-radius: 0;
+  margin:0;
+}
