@@ -216,10 +216,26 @@ row.expander {
   background-color: transparent;
 
   list.nested > row {
-    background-color: hdyalpha($bg_color, 0.5);
-    border-color: hdyalpha($borders_color, 0.7);
-    border-style: solid;
-    border-width: 1px 0px 0px 0px;
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+
+    &:not(:selected).activatable {
+      &:hover {
+        background-color: gtkalpha(currentColor, .03);
+      }
+
+      &:active {
+        background-color: gtkalpha(currentColor, .08);
+      }
+    }
+  }
+
+  list.nested {
+    background-color: gtkalpha($card_shade_color, .5);
+    color: inherit;
+    border-radius: 0;
+    border-top: 1px solid $border_color;
   }
 
   // HdyExpanderRow arrow rotation
@@ -252,6 +268,76 @@ row.expander {
   & image.expander-row-arrow:disabled {
     color: $insensitive_fg_color;
   }
+}
+
+// Lists
+list.content {
+  list {
+    background-color: transparent;
+    border-radius: $card_radius;
+  }
+
+  background-color: transparent; //$card_bg_color;
+  color: $card_fg_color;
+  border-radius: $card_radius;
+
+  > row {
+    background-color: $card_bg_color;
+    color: $card_fg_color;
+    margin: 0;
+    //padding: 2px;
+    transition: 200ms $ease-out-quad;
+
+    &:not(:last-child) {
+      //border-bottom: 1px solid $border_color;
+      box-shadow: inset 0 -1px $card_shade_color;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:not(:first-child):not(:last-child) {
+      border-radius: 0;
+      border-left: 1px solid $card_shade_color;
+      border-right: 1px solid $card_shade_color;
+      -gtk-outline-radius: 0;
+    }
+
+    &:first-child {
+      border-top-left-radius: $card_radius;
+      border-top-right-radius: $card_radius;
+      border-top: 1px solid $card_shade_color;
+      border-left: 1px solid $card_shade_color;
+      border-right: 1px solid $card_shade_color;
+      -gtk-outline-radius: $card_radius $card_radius 0 0;
+    }
+
+    &:last-child {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: $card_radius;
+      border-bottom-right-radius: $card_radius;
+      border-bottom: 1px solid $card_shade_color;
+      border-left: 1px solid $card_shade_color;
+      border-right: 1px solid $card_shade_color;
+      -gtk-outline-radius: 0 0 $card_radius $card_radius;
+    }
+
+    &:only-child {
+      border: 1px solid $card_shade_color;
+      border-radius: $card_radius;
+      -gtk-outline-radius: $card_radius;
+    }
+
+    &:not(.expander):not(:active):hover.activatable:not(:selected),
+    &.expander row.header:not(:active):hover.activatable:not(:selected) {
+      background-color: hdymix($card_fg_color, $card_bg_color, 0.954);
+    }
+  }
+}
+
+// List button
+button.list-button:not(:active):not(:checked):not(:hover) {
+  @include button(normal, $card_bg_color, $card_fg_color);
 }
 
 // HdyKeypad
@@ -441,102 +527,9 @@ viewswitchertitle viewswitcher {
   margin-right: 12px;
 }
 
-// Lists
-list.content {
-  list {
-    background-color: transparent;
-    border-radius: $card_radius;
-  }
-
-  background-color: $card_bg_color;
-  color: $card_fg_color;
-  border-radius: $card_radius;
-
-  // This is one thing that can't be the same as libadwaita becuase ...
-  border: 1px solid $borders_color;
-
-  // ... these shadows aren't always possible with GTK3.
-
-  //box-shadow: 0 0 0 1px transparentize(black, 0.97),
-  //            0 1px 3px 1px transparentize(black, .93),
-  //            0 2px 6px 2px transparentize(black, .97);
-
-  &:backdrop { color: $backdrop_fg_color; }
-
-  // Nested rows background
-  // FIXME, bring this closer to libadwaita
-  list.nested > row:not(:active) {
-    border: 1px solid $borders_color;
-    &:not(:hover):not(:selected),
-    &:hover:not(.activatable):not(:selected) {
-      background-color: hdymix($bg_color, $card_bg_color, 0.5);
-    }
-
-    &:hover.activatable:not(:selected) {
-      background-color: hdymix($fg_color, $card_bg_color, 0.954);
-    }
-  }
-
-  > row {
-    margin: 0;
-    padding: 2px;
-    transition: 200ms $ease-out-quad;
-    // Add space around expanded rows
-    &.expander:checked:not(:first-child),
-    &.expander:checked + row {
-      margin-top: 6px;
-    }
-
-    &:not(:last-child) {
-      border-bottom: 1px solid $border_color;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    &:not(:first-child):not(:last-child) {
-      border-radius: 0;
-      -gtk-outline-radius: 0;
-    }
-
-    &:first-child {
-      border-top-left-radius: $card_radius;
-      border-top-right-radius: $card_radius;
-      -gtk-outline-radius: $card_radius $card_radius 0 0;
-    }
-
-    &:last-child {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: $card_radius;
-      border-bottom-right-radius: $card_radius;
-      -gtk-outline-radius: 0 0 $card_radius $card_radius;
-    }
-
-    &:only-child {
-      border-bottom: none;
-      border-radius: $card_radius;
-      -gtk-outline-radius: $card_radius;
-    }
-
-    &:not(.expander):not(:active):hover.activatable:not(:selected),
-    &.expander row.header:not(:active):hover.activatable:not(:selected) {
-      background-color: hdymix($fg_color, $card_bg_color, 0.954);
-    }
-  }
-}
-
-// List button
-button.list-button:not(:active):not(:checked):not(:hover) {
-  @include button(normal, $card_bg_color, $fg_color);
-}
-
 // HdyStatusPage
 statuspage > scrolledwindow > viewport > box > clamp > box > .icon {
   color: gtkalpha($fg_color, 0.5);
-
-  &:backdrop {
-    color: gtkalpha($backdrop_fg_color, 0.5);
-  }
 }
 
 statuspage > scrolledwindow > viewport > box {
@@ -602,13 +595,13 @@ row {
 
 tabbar {
   .box {
-    min-height: 30px;
-    background: $tab_color;
-    border-bottom: 1px solid $borders_color;
+    min-height: 38px;
+    background: $headerbar_bg_color;
+    border-bottom: 1px solid $headerbar_shade_color;
 
     &:backdrop {
-      background-color: $tab_color_backdrop;
-      border-color: $backdrop_borders_color;
+      color: gtkmix($headerbar_fg_color, $headerbar_backdrop_color, 50%);
+      background-color: $headerbar_backdrop_color;
     }
   }
 
@@ -632,20 +625,12 @@ tabbar {
     tabbox {
       &:dir(ltr) {
         padding-right: 1px;
-        box-shadow: inset -1px 0 $alt_borders_color;
-
-        &:backdrop {
-          box-shadow: inset -1px 0 $backdrop_borders_color;
-        }
+        box-shadow: inset -1px 0 $border_color;
       }
 
       &:dir(rtl) {
         padding-left: 1px;
-        box-shadow: inset 1px 0 $alt_borders_color;
-
-        &:backdrop {
-          box-shadow: inset 1px 0 $backdrop_borders_color;
-        }
+        box-shadow: inset 1px 0 $border_color;
       }
     }
   }
@@ -671,39 +656,50 @@ tabbar {
   }
 
   tab {
-    border-style: solid;
-    border-color: $borders_color;
-    border-width: 0 1px 0 1px;
-    transition: background 150ms ease-in-out;
-    background-color: $tab_color;
+    margin: 4px 3px;
+    border-style: none;
+    border-radius: $button_radius;
+    transition: background-color 150ms ease-in-out;
 
-    &:checked {
-      background-color: $tab_color_active;
+    background-image: if($variant == 'light',
+                          -gtk-scaled(
+                            url('assets/tab-border-light.png'),
+                            url('assets/tab-border-light@2.png')
+                          ),
+                          -gtk-scaled(
+                            url('assets/tab-border-dark.png'),
+                            url('assets/tab-border-dark@2.png')
+                          )
+                        );
 
-      &:hover { background-color: $tab_color_active_hover; }
+    background-position: left;
+    background-repeat: no-repeat;
+
+    &:first-child { background-image: none; }
+
+    &:hover {
+      background-color: $view_hover_color;
+      &, + tab { background-image: none; }
     }
 
-    &:hover { background-color: $tab_color_hover; }
+    &:checked {
+      background-color: $view_selected_color;
+      &, + tab { background-image: none; }
 
-    &:backdrop {
-      border-color: $backdrop_borders_color;
-      background-color: $tab_color_backdrop;
-
-      &:hover { background-color: $tab_color_backdrop_hover; }
-      &:checked { background-color: $tab_color_backdrop_active; }
+      &:hover { background-color: $view_selected_hover_color; }
     }
   }
 
   .start-action,
   .end-action {
-    background: $tab_color;
-    border-color: $alt_borders_color;
+    background-color: $headerbar_bg_color;
+    border-color: transparent;
     border-style: solid;
-    transition: background 150ms ease-in-out;
+    transition: background-color 150ms ease-in-out;
 
     &:backdrop {
-      border-color: $backdrop_borders_color;
-      background-color: $backdrop_dark_fill;
+      border-color: transparent;
+      background-color: $headerbar_backdrop_color;
     }
 
     button {
@@ -892,4 +888,9 @@ tabbar .tab-indicator:not(.clickable) {
     // This is the most reliable way to enable window dragging
     -GtkWidget-window-dragging: true;
   }
+}
+
+// Heading text usually found above some hdy lists (gnome web)
+.heading.h4 {
+  color: $window_fg_color;
 }
