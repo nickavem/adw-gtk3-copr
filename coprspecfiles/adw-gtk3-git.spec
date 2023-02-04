@@ -9,9 +9,10 @@ BuildRequires: git
 BuildRequires: meson
 BuildRequires: ninja-build
 
+Provides:	adw-gtk3
+
 %description
 The theme from libadwaita ported to GTK-3
-
 
 %prep
 git clone --recurse-submodules https://github.com/lassekongo83/adw-gtk3.git

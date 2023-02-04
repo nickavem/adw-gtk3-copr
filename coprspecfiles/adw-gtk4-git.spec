@@ -1,4 +1,4 @@
-Name:           adw-gtk4
+Name:           adw-gtk4-git
 # Match Current Libadwaita Version
 Version:        main
 Release:        2%{?dist}
@@ -14,6 +14,7 @@ BuildRequires: cmake
 BuildRequires: meson
 BuildRequires: ninja-build
 Requires: adw-gtk3
+Provides:	adw-gtk4
 
 %description
 The theme from libadwaita ported to stock GTK-4
