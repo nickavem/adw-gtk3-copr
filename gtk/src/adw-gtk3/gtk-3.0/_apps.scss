@@ -357,7 +357,7 @@ $disk_space_free: #eeeeec;
 // * Gedit *
 // *********
 
-.org-gnome-gedit { @extend %libadwaita_tabs; }
+.org-gnome-gedit, .gedit-side-panel-paned { @extend %libadwaita_tabs; }
 
 .gedit-search-slider {
   // gives gedit search entry some padding and a border
@@ -543,7 +543,7 @@ $panel_transition_duration: 250ms;
         @include button(normal, $menu_color, $text_color);
         &:disabled {
           @include button(insensitive);
-          border-color: gtkalpha($borders_color, 0.5);
+          border-color: gtkalpha($borders_color, $disabled_opacity);
         }
       }
     }
@@ -709,6 +709,7 @@ window.background.chromium {
 
   // https://github.com/lassekongo83/adw-gtk3/issues/130
   menuitem {
+    border-radius: 0;
     check,
     radio {
       min-height: 12px;
@@ -749,6 +750,56 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
     @extend .dim-label;
   }
   image { color: $selected_fg_color; }
+}
+
+.incognito-mode {
+  headerbar, headerbar.titlebar, .titlebar {
+    background: $incognito_bg_color;
+
+    &:backdrop {
+      background: gtkmix($incognito_bg_color, $bg_color, 50%);
+    }
+
+    button.image-button {
+      &:hover {
+        @include button(normal, gtkmix(currentColor, $incognito_bg_color, -3%), $headerbar_fg_color);
+
+        &:backdrop {
+          @include button(backdrop, gtkmix(currentColor, $incognito_bg_color, -1%), $backdrop_headerbar_fg);
+        }
+      }
+
+      &:active, &:checked {
+        @if $variant == 'light' {
+          @include button(normal, $incognito_bg_color, $headerbar_fg_color);
+          &:hover {
+            @include button(normal, gtkmix(currentColor, $incognito_bg_color, 3%), $headerbar_fg_color);
+          }
+        }
+        @else {
+          @include button(normal, $incognito_bg_color, $headerbar_fg_color);
+          &:hover {
+            @include button(normal, gtkmix(currentColor, $incognito_bg_color, 3.7%), $headerbar_fg_color);
+          }
+        }
+        &:backdrop {
+          @include button(backdrop, $incognito_bg_color, $backdrop_headerbar_fg);
+        }
+      }
+    }
+    entry {
+      @include button(normal, $incognito_bg_color, $headerbar_fg_color);
+      &:backdrop {
+        @include button(backdrop, $incognito_bg_color, $backdrop_headerbar_fg);
+      }
+      &:disabled {
+        @include button(insensitive, $incognito_bg_color, $disabled_headerbar_fg);
+      }
+      &:disabled:backdrop {
+        @include button(insensitive, $incognito_bg_color, $backdrop_headerbar_fg);
+      }
+    }
+  }
 }
 
 // ***********
