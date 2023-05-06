@@ -8,6 +8,7 @@ BuildRequires: sassc
 BuildRequires: git
 BuildRequires: meson
 BuildRequires: ninja-build
+Provides:       adw-gtk4
 
 %description
 The theme from libadwaita ported to GTK-3
