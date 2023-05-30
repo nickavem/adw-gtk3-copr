@@ -1,6 +1,6 @@
 Name:           adw-gtk3
 Version:        4.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The theme from libadwaita ported to GTK-3
 License:        GPLv2+
 URL:            https://github.com/lassekongo83/adw-gtk3
@@ -8,6 +8,7 @@ BuildRequires: sassc
 BuildRequires: git
 BuildRequires: meson
 BuildRequires: ninja-build
+Provides:       adw-gtk4
 
 %description
 The theme from libadwaita ported to GTK-3
